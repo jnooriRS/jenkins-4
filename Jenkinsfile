@@ -5,18 +5,7 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('docker')
     }
     stages {
-        stage('Init') {
-            steps {
-                sh 'docker rm -f $(docker ps -qa)'
-                sh 'docker network create trio-task-network'
-            }
-        }
-        stage('Build') {
-            steps {
-                sh 'docker build -t trio-task-mysql:5.7 db'
-                sh 'docker build -t trio-task-flask-app:latest flask-app'
-            }
-        }
+    
         stage('Deploy') {
             steps {
                 sh './deploy.sh'
