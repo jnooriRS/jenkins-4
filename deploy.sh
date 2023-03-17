@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # remove running containers
-docker ps -qa | xargs docker rm -f || true
+docker rm -f $(docker ps -qa) || true
 
 # create a network
 docker network create trio-task-network
