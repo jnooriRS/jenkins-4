@@ -44,9 +44,9 @@ pipeline {
 
                            echo 'Login Completed'
 
-                sh "docker tag nginx chrisreeves1/mynginx:latest"
+                sh "docker tag nginx jnoori31/mynginx:latest"
 
-                sh "docker push chrisreeves1/mynginx:latest"
+                sh "docker push jnoori31/mynginx:latest"
 
             }          
 
