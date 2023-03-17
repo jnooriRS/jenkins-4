@@ -11,8 +11,6 @@ pipeline {
         sh 'chmod +x ./deploy.sh'
         sh './deploy.sh'
     }
-}
-
         }
         stage('Push') {        
             steps {                                  
