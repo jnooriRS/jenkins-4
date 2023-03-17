@@ -1,29 +1,29 @@
 #!/bin/bash
 
-# remove running containers
+#!/remove running containers
 docker ps -qa | xargs docker rm -f || true
 
-# create a network
+#!/create a network
 docker network create trio-task-network
 
-# build flask and mysql
+#!build flask and mysql
 docker build -t trio-task-mysql:5.7 db
 docker build -t trio-task-flask-app:latest flask-app
 
-# run mysql container
+#!/run mysql container
 docker run -d \
     --name mysql \
     --network trio-task-network \
     trio-task-mysql:5.7
 
-# run flask container
+#!/run flask container
 docker run -d \
     -e MYSQL_ROOT_PASSWORD=password \
     --name flask-app \
     --network trio-task-network \
     trio-task-flask-app:latest
 
-# run the nginx container
+#!/run the nginx container
 docker run -d \
     --name nginx \
     -p 80:80 \
@@ -31,6 +31,6 @@ docker run -d \
     --mount type=bind,source=$(pwd)/nginx/nginx.conf,target=/etc/nginx/nginx.conf \
     nginx:latest
 
-# show running containers
+#!/show running containers
 echo
 docker ps -a
