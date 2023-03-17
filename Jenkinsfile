@@ -1,56 +1,33 @@
 pipeline {
-
     agent any
-
     environment {
-
         SECRET_VAR = credentials('3')
-
-        DOCKERHUB_CREDENTIALS=credentials('docker')
-
+        DOCKERHUB_CREDENTIALS = credentials('docker')
     }
-
     stages {
-
         stage('Init') {
-
             steps {
-
-                sh 'docker stop mynginx || true'
-
-                sh 'docker rm mynginx || true'
-
+                sh 'docker rm -f $(docker ps -qa)'
+                sh 'docker network create trio-task-network'
             }
-
-        }  
-
+        }
         stage('Build') {
-
             steps {
-
-                sh 'docker run -d -p 80:80 --name mynginx nginx:latest'
-
-                              sh "docker exec mynginx sh -c 'echo \"Hello Jenkins! ${SECRET_VAR}\" > /usr/share/nginx/html/index.html' "
-
+                sh 'docker build -t trio-task-mysql:5.7 db'
+                sh 'docker build -t trio-task-flask-app:latest flask-app'
             }
-
         }
-
-         stage('Push') {        
-
-            steps{                                  
-
-                           sh "echo \$DOCKERHUB_CREDENTIALS_PSW | docker login -u \$DOCKERHUB_CREDENTIALS_USR --password-stdin"                                  
-
-                           echo 'Login Completed'
-
+        stage('Deploy') {
+            steps {
+                sh './deploy.sh'
+            }
+        }
+        stage('Push') {        
+            steps {                                  
+                sh "echo \$DOCKERHUB_CREDENTIALS_PSW | docker login -u \$DOCKERHUB_CREDENTIALS_USR --password-stdin"                                  
                 sh "docker tag nginx jnoori31/mynginx:latest"
-
                 sh "docker push jnoori31/mynginx:latest"
-
             }          
-
         }
-
     }
 }
