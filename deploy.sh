@@ -4,7 +4,7 @@
 
 # remove running containers
 
-docker rm -f $(docker ps -qa)
+docker rm -f $(docker ps -qa) || true
 
  
 
