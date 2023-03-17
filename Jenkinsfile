@@ -7,10 +7,12 @@ pipeline {
     stages {
     
         stage('Deploy') {
-            steps {
-                sh 'chmod+x ./deploy.sh'
-                sh './deploy.sh'
-            }
+    steps {
+        sh 'chmod +x ./deploy.sh'
+        sh './deploy.sh'
+    }
+}
+
         }
         stage('Push') {        
             steps {                                  
